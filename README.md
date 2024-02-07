@@ -18,7 +18,7 @@
 
 * linux 64bit (git, make, sed)
 * [docker](http://docker.io)
-* [dcape](https://github.com/dopos/dcape) v2
+* [dcape](https://github.com/dopos/dcape) v3
 * Git service ([github](https://github.com), [gitea](https://gitea.io) or [gogs](https://gogs.io))
 
 ## Install
@@ -36,14 +36,15 @@
 ```bash
 git clone --single-branch --depth 1 https://github.com/dopos/dcape-app-dendrite.git
 cd dcape-app-dendrite
-make config
-... <edit .env.sample>
-mv .env.sample .env
+make config-if
+... <edit .env>
+make init-files
 make up
+make create-user-admin
 ```
 
 ## License
 
 The MIT License (MIT), see [LICENSE](LICENSE).
 
-Copyright (c) 2022 Aleksei Kovrizhkin <lekovr+dopos@gmail.com>
+Copyright (c) 2024 Aleksei Kovrizhkin <lekovr+dopos@gmail.com>

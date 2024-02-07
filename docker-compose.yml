@@ -8,9 +8,8 @@ services:
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-      - ./config:/etc/dendrite
-      - ${DCAPE_ROOT}/${DATA_PATH}/config:/etc/dendrite
-      - ${DCAPE_ROOT}/${DATA_PATH}/media:/var/dendrite/media
+      - ${APP_ROOT}/config:/etc/dendrite
+      - ${APP_ROOT}/data:/var/dendrite
     command:
       --tls-cert=server.crt --tls-key=server.key
     labels:
