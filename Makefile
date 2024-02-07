@@ -18,6 +18,9 @@ APP_SITE           ?= matrix.$(APP_DOMAIN)
 #- app root
 APP_ROOT           ?= $(PWD)
 
+#- App shared secret
+APP_SECRET         ?= $(shell openssl rand -hex 16; echo)
+
 #- Docker image name
 IMAGE              ?= ghcr.io/matrix-org/dendrite-monolith
 
@@ -25,9 +28,7 @@ IMAGE              ?= ghcr.io/matrix-org/dendrite-monolith
 IMAGE_VER          ?= v0.13.6
 
 USE_DB              = yes
-
-# Default username for create-user-admin
-APP_USER           ?= admin
+ADD_USER            = yes
 
 # ------------------------------------------------------------------------------
 
@@ -52,6 +53,9 @@ endif
 
 .default-deploy: init-files
 
+## init app for install via CLI
+init-cli: init-files db-create
+
 ## create required files
 init-files: $(APP_ROOT)/config $(APP_ROOT)/config/matrix_key.pem $(APP_ROOT)/config/dendrite.yaml
 
@@ -70,11 +74,11 @@ $(APP_ROOT)/config/matrix_key.pem11:
 	  -tls-cert /mnt/server.crt \
 	  -tls-key /mnt/server.key
 
-$(APP_ROOT)/config/dendrite.yaml: dendrite-sample.monolith.yaml
+$(APP_ROOT)/config/dendrite.yaml: dendrite-sample.yaml
 	@sed "s/server_name: localhost/server_name: $(APP_DOMAIN)/ ; s|postgresql://username:password\@hostname/dendrite|postgresql://$(PGUSER):$(PGPASSWORD)\@db/$(PGDATABASE)|" $<  > $@
-
+	@sed -i "s/registration_shared_secret: \"\"/registration_shared_secret: \"$(APP_SECRET)\"/" $@
 ## create admin user
-create-user-admin: CMD=exec -it app /usr/bin/create-account -config /etc/dendrite/dendrite.yaml -username $(APP_USER) -admin
+create-user-admin: CMD=exec -it app /usr/bin/create-account -config /etc/dendrite/dendrite.yaml -username $(USER_NAME) -password $(USER_PASS) -admin
 create-user-admin: dc
 
 ## show create help

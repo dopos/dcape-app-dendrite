@@ -38,7 +38,7 @@ git clone --single-branch --depth 1 https://github.com/dopos/dcape-app-dendrite.
 cd dcape-app-dendrite
 make config-if
 ... <edit .env>
-make init-files
+make init-cli
 make up
 make create-user-admin
 ```
