@@ -34,7 +34,7 @@
 ### By hands
 
 ```bash
-git clone --single-branch --depth 1 https://github.com/dopos/dcape-app-dendrite.git
+git clone https://github.com/dopos/dcape-app-dendrite.git
 cd dcape-app-dendrite
 make config-if
 ... <edit .env>
