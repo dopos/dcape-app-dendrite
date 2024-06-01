@@ -25,7 +25,7 @@ APP_SECRET         ?= $(shell openssl rand -hex 16; echo)
 IMAGE              ?= ghcr.io/matrix-org/dendrite-monolith
 
 #- Docker image tag
-IMAGE_VER          ?= v0.13.6
+IMAGE_VER          ?= v0.13.7
 
 USE_DB              = yes
 ADD_USER            = yes
