@@ -1,8 +1,6 @@
 # custom app config
 # overrides DCAPE/apps/drone/dcape-app/docker-compose.yml
 
-version: '2'
-
 services:
   app:
     volumes:
