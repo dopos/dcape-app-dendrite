@@ -24,6 +24,13 @@ APP_SECRET         ?= $(shell openssl rand -hex 16; echo)
 #- Docker image name
 IMAGE              ?= ghcr.io/matrix-org/dendrite-monolith
 
+#- sync v3 docker image
+SYNCV3_IMAGE       ?= ghcr.io/matrix-org/sliding-sync:latest
+#- sync v3 secret
+SYNCV3_SECRET      ?= $(shell openssl rand -hex 32 ; echo)
+#- sync v3 database name
+SYNCV3_DB          ?= $(APP_NAME)-sync
+
 #- Docker image tag
 IMAGE_VER          ?= v0.13.7
 
@@ -55,6 +62,12 @@ endif
 
 ## init app for install via CLI
 init-cli: init-files db-create
+
+sync-db-create: PGDATABASE=$(SYNCV3_DB)
+sync-db-create: .lib-db-create
+
+sync-db-drop: PGDATABASE=$(SYNCV3_DB)
+sync-db-drop: .lib-db-drop
 
 ## create required files
 init-files: $(APP_ROOT)/config $(APP_ROOT)/config/matrix_key.pem $(APP_ROOT)/config/dendrite.yaml

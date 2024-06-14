@@ -11,4 +11,31 @@ services:
     command:
       --tls-cert=server.crt --tls-key=server.key
     labels:
-      - "traefik.http.services.app-${APP_TAG}.loadbalancer.server.port=8008"
+      - traefik.http.services.app-${APP_TAG}.loadbalancer.server.port=8008
+
+  syncv3:
+    image: $SYNCV3_IMAGE
+    labels:
+      - traefik.enable=true
+      - dcape.traefik.tag=${DCAPE_TAG}
+      - traefik.http.services.app-${APP_TAG}.loadbalancer.server.port=8008
+      - traefik.http.routers.dashboard.rule=Host(`${APP_SITE}`) && (PathPrefix(`/client/`) || PathPrefix(`/_matrix/client/unstable/org.matrix.msc3575/sync`))
+      - traefik.http.routers.${APP_TAG}.tls=${USE_TLS}
+      - traefik.http.routers.${APP_TAG}.tls.certresolver=default
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/ssl/certs:/etc/ssl/certs:ro
+    restart: always
+    depends_on:
+      - app
+    environment:
+#      - SYNCV3_SERVER=https://${APP_SITE}
+      - SYNCV3_SERVER=http://app:8008
+      - SYNCV3_DB=postgres://${PGUSER}:${PGPASSWORD}@db/${SYNCV3_DB}?sslmode=disable
+      - SYNCV3_SECRET
+
+#   -e "SYNCV3_BINDADDR=:8008" \
+#   -p 8008:8008 \
+
+#=user=$(whoami) dbname=syncv3 sslmode=disable host=host.docker.internal password='DATABASE_PASSWORD_HERE'" \
