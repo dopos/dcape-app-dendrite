@@ -7,7 +7,7 @@ services:
     labels:
       - traefik.enable=true
       - dcape.traefik.tag=${DCAPE_TAG}
-      - traefik.http.routers.dashboard.rule=Host(`${APP_SITE}`) && (PathPrefix(`/_matrix/`) || PathPrefix(`/_synapse/client`))
+      - traefik.http.routers.${APP_TAG}.rule=Host(`${APP_SITE}`) && (PathPrefix(`/_matrix/`) || PathPrefix(`/_synapse/client`))
       - traefik.http.routers.${APP_TAG}.tls=${USE_TLS}
       - traefik.http.routers.${APP_TAG}.tls.certresolver=default
       - traefik.http.services.${APP_TAG}.loadbalancer.server.port=8008
@@ -26,7 +26,7 @@ services:
     labels:
       - traefik.enable=true
       - dcape.traefik.tag=${DCAPE_TAG}
-      - traefik.http.routers.dashboard.rule=Host(`${APP_SITE}`) && (PathPrefix(`/client/`) || PathPrefix(`/_matrix/client/unstable/org.matrix.msc3575/sync`))
+      - traefik.http.routers.${APP_TAG}-sync.rule=Host(`${APP_SITE}`) && (PathPrefix(`/client/`) || PathPrefix(`/_matrix/client/unstable/org.matrix.msc3575/sync`))
       - traefik.http.services.${APP_TAG}-sync.loadbalancer.server.port=8008
       - traefik.http.routers.${APP_TAG}-sync.tls=${USE_TLS}
       - traefik.http.routers.${APP_TAG}-sync.tls.certresolver=default
