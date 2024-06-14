@@ -37,6 +37,9 @@ IMAGE_VER          ?= v0.13.7
 USE_DB              = yes
 ADD_USER            = yes
 
+# Disable dcape addons
+USE_DCAPE_DC        = no
+
 # ------------------------------------------------------------------------------
 
 # if exists - load old values
